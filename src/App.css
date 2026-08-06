@@ -1,8 +1,49 @@
 html {
   color-scheme: light dark;
   font-family: system-ui;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100%;
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #ff0000, transparent);
+  font-family: sans-serif;
+}
+
+div#app {
+  margin: 100px auto 0;
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  padding: 2rem;
+}
+
+menu {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+menu li button {
+  padding: 0.5rem;
+  background: red;
+  border: 0;
+  outline: none;
+  color: #fff;
+  font-size: 1rem;
+  text-transform: capitalize;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+menu li button:hover {
+  background: #00f443;
+}
+
+menu li button.active {
+  background: #00f443;
 }

@@ -1,0 +1,10 @@
+.core-section {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.core-concept {
+  background: linear-gradient(45deg, #20b649, transparent);
+  padding: 0.5rem;
+}
