@@ -1,0 +1,44 @@
+ul.player-name-list li {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  align-items: center;
+}
+
+ul.player-name-list {
+  display: flex;
+  justify-content: space-around;
+  background: #333;
+  padding: 1rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+span.player-name {
+  padding-inline: 1rem;
+}
+
+span.player-symbol {
+  color: red;
+  font-size: 1.5rem;
+}
+
+ol.grid-list-container li {
+  list-style: none;
+  display: inline;
+}
+
+ol.grid-list-container li button {
+  width: 80px;
+  height: 80px;
+}
+
+.game-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+li.active {
+  background: #2fa437;
+}
