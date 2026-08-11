@@ -2,8 +2,11 @@ import React from "react";
 import TicPlayer from "./TicPlayer";
 import GameBoard from "./GameBoard";
 import GameLog from "./GameLog";
+import WinDrawPanel from "./WinDrawPanel";
 import { WINNING_COMBINATION } from "./WINNING_COMBINATION";
 import "./TicTacMain.css";
+
+const initialBoardState = Array.from({ length: 3 }, () => Array(3).fill(null));
 
 function activePlayerFinder(
   gameTurn: { square: { row: number; col: number }; player: "X" | "O" }[],
@@ -13,6 +16,32 @@ function activePlayerFinder(
     playername = "O";
   }
   return playername;
+}
+
+function checkWinning(boardState: string[][]): boolean {
+  let winner: boolean = false;
+  for (let combination of WINNING_COMBINATION) {
+    const firstSqare = boardState[combination[0].row][combination[0].col];
+    const secondSqare = boardState[combination[1].row][combination[1].col];
+    const thirdSqare = boardState[combination[2].row][combination[2].col];
+    if (firstSqare && firstSqare === secondSqare && firstSqare === thirdSqare) {
+      winner = true;
+    }
+  }
+  return winner;
+}
+
+let boardState = [...initialBoardState.map((item) => [...item])];
+
+function boardHanlder(
+  gameTurn: { square: { row: number; col: number }; player: "X" | "O" }[],
+) {
+  for (let turn of gameTurn) {
+    const { square, player } = turn;
+    const { row, col } = square;
+    boardState[row][col] = player;
+  }
+  return boardState;
 }
 
 export default function TicTacMain() {
@@ -31,6 +60,10 @@ export default function TicTacMain() {
   >([]);
 
   let activePlayer: "X" | "O" = activePlayerFinder(gameTurn);
+
+  let draw = false;
+
+  const boardState = boardHanlder(gameTurn);
 
   const handleEdit = (index: number, name: string) => {
     setPlayers((prevPlayers) =>
@@ -52,9 +85,25 @@ export default function TicTacMain() {
     });
   };
 
+  const winner = checkWinning(boardState);
+  draw = gameTurn.length === 9 && !winner;
+
+  const handleRematch = () => {
+    setGameTurn([]);
+  };
+
   return (
     <>
       <h1>Tic Tac Game</h1>
+      {(winner || draw) && (
+        <WinDrawPanel
+          winner={winner}
+          playerName={
+            activePlayer === "X" ? players[1].playerName : players[0].playerName
+          }
+          onSelect={handleRematch}
+        />
+      )}
       <div className="gameContainer">
         <div className="player-container">
           <ul className="player-name-list">
@@ -71,7 +120,7 @@ export default function TicTacMain() {
         </div>
 
         <div className="game-section">
-          <GameBoard onSelect={handlePlayerSwitch} gameTurn={gameTurn} />
+          <GameBoard onSelect={handlePlayerSwitch} boardState={boardState} />
           <GameLog gameTurn={gameTurn} />
         </div>
       </div>
