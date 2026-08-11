@@ -2,7 +2,18 @@ import React from "react";
 import TicPlayer from "./TicPlayer";
 import GameBoard from "./GameBoard";
 import GameLog from "./GameLog";
+import { WINNING_COMBINATION } from "./WINNING_COMBINATION";
 import "./TicTacMain.css";
+
+function activePlayerFinder(
+  gameTurn: { square: { row: number; col: number }; player: "X" | "O" }[],
+): "X" | "O" {
+  let playername: "X" | "O" = "X";
+  if (gameTurn[0]?.player === "X" && gameTurn.length > 0) {
+    playername = "O";
+  }
+  return playername;
+}
 
 export default function TicTacMain() {
   const [players, setPlayers] = React.useState<
@@ -15,7 +26,11 @@ export default function TicTacMain() {
     { playerName: "Player 2", playerSymbol: "O" },
   ]);
 
-  const [activePlayer, setActivePlayer] = React.useState<"X" | "O">("X");
+  const [gameTurn, setGameTurn] = React.useState<
+    { square: { row: number; col: number }; player: "X" | "O" }[]
+  >([]);
+
+  let activePlayer: "X" | "O" = activePlayerFinder(gameTurn);
 
   const handleEdit = (index: number, name: string) => {
     setPlayers((prevPlayers) =>
@@ -26,8 +41,15 @@ export default function TicTacMain() {
     );
   };
 
-  const handlePlayerSwitch = () => {
-    setActivePlayer((prev) => (prev === "X" ? "O" : "X"));
+  const handlePlayerSwitch = (rndex: number, cndex: number) => {
+    setGameTurn((prevTurn) => {
+      const playername = activePlayerFinder(prevTurn);
+
+      return [
+        { square: { row: rndex, col: cndex }, player: playername },
+        ...prevTurn,
+      ];
+    });
   };
 
   return (
@@ -49,11 +71,8 @@ export default function TicTacMain() {
         </div>
 
         <div className="game-section">
-          <GameBoard
-            onSelect={handlePlayerSwitch}
-            activePlayer={activePlayer}
-          />
-          <GameLog />
+          <GameBoard onSelect={handlePlayerSwitch} gameTurn={gameTurn} />
+          <GameLog gameTurn={gameTurn} />
         </div>
       </div>
     </>
