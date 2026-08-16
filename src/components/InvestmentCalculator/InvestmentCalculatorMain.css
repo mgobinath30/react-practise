@@ -1,0 +1,10 @@
+table.result-table {
+  width: 100%;
+  border: 1px solid;
+}
+
+table.result-table tr,
+th,
+td {
+  border: 1px solid;
+}
